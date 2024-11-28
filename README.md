@@ -28,19 +28,18 @@ Pre-Requisite    |    Description
 On-board subscription for preview    |    Register for **Gen1 to Trusted launch upgrade preview** at https://aka.ms/Gen1ToTLUpgrade.
 [PowerShell version 7.2 or above](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows)    |    Required version for parallel processing.
 [Az PowerShell Module](https://learn.microsoft.com/powershell/azure/what-is-azure-powershell)    |    Required cmdlets for Azure Platform.
-VM Contributor rights on Gen1 VM resource group.    |    Required RBAC permissions to modify and re-deploy Gen1 VM.
 VM is in allocated / Running state.    |    Required to read current state and configuration of Gen1 VM and execute MBR to GPT conversion.
 Operating System    |    Operating system should be [Trusted launch supported.](https://aka.ms/TrustedLaunch) except <ul><li>Windows Server 2016</li></ul>**NOTE**:<ul><li>For Linux VMs, execute MBR to GPT locally on VM. Refer to steps [Linux MBR to GPT conversion](#linux-os-mbr-to-gpt-conversion)<li> Windows Server 2016 does not natively supports `MBR to GPT` conversion.</li></ul>
 Azure IaaS VM Agent    |    [Azure IaaS Windows VM Agent](https://learn.microsoft.com/azure/virtual-machines/extensions/agent-windows) OR [Azure IaaS Linux VM Agent](https://learn.microsoft.com/azure/virtual-machines/extensions/agent-linux) should be installed and healthy.
-Disk Encryption    |    If enabled, Disable any OS disk encryption including Bitlocker, CRYPT, [Server side encryption with customer managed keys](https://learn.microsoft.com/azure/virtual-machines/disk-encryption) prior to upgrade. All disk encryptions should be re-enabled post successful upgrade.
+Disk Encryption    |    If enabled, Disable any OS disk encryption including Bitlocker, CRYPT prior to upgrade. All disk encryptions should be re-enabled post successful upgrade.
 VM Backup    |    Azure Backup if enabled for VM(s) should be configured with Enhanced Backup Policy. Trusted launch security type cannot be enabled for Generation 2 VM(s) configured with Standard Policy backup protection.<br/>Existing Azure VM backup can be migrated from Standard to Enhanced policy using [Migrate Azure VM backups from standard to enhanced policy (preview)](https://learn.microsoft.com/azure/backup/backup-azure-vm-migrate-enhanced-policy)
-VM Disaster Recovery    |    Trusted launch VMs currently do not support Azure Site Recovery (ASR). If enabled, ASR should be disabled prior to upgrade.
+VM Disaster Recovery    |    Azure site recovery (ASR) does not supports Trusted launch upgrade. If enabled, ASR should be disabled prior to upgrade and re-enabled post upgrade.
 
 ## Best Practices
 
 Best Practice    |    Description
 -|-
-Validate in lower environment    |    Enable Trusted launch on a test Generation 2 VM and ensure if any changes are required to meet the prerequisites before enabling Trusted launch on Generation 2 VMs associated with production workloads.
+Validate in lower environment    |    Enable Trusted launch on a test Generation 2 VM and ensure if any changes are required to meet the prerequisites before enabling Trusted launch on VMs associated with production workloads.
 **Backup** Gen1 VM    |    Create restore point for Azure Generation 1 VM(s) associated with  workloads before enabling Trusted launch security type. You can use the Restore Point to re-create the disks and Generation 1 VM with the previous well-known state.
 OS Disk free space    |    You will not be able to extend **Windows OS disk system volume** after MBR to GPT conversion. Recommendation is to extend system volume for future before executing Gen2-Trusted launch upgrade.
 OS Defragmentation    |    **Windows OS disk volume** should be defragmented using command `Defrag C: /U /V`. This will reduce the risk of MBR to GPT conversion failure by freeing up end of partitions. For more details, refer to [defrag](https://learn.microsoft.com/windows-server/administration/windows-commands/defrag)
