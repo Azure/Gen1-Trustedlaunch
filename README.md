@@ -39,7 +39,7 @@ VM Disaster Recovery    |    Azure site recovery (ASR) does not supports Trusted
 
 Best Practice    |    Description
 -|-
-Validate in lower environment    |    Enable Trusted launch on a test Generation 2 VM and ensure if any changes are required to meet the prerequisites before enabling Trusted launch on VMs associated with production workloads.
+Validate in lower environment    |    Enable Trusted launch on a test Generation 1 VM and ensure if any changes are required to meet the prerequisites before enabling Trusted launch on VMs associated with production workloads.
 **Backup** Gen1 VM    |    Create restore point for Azure Generation 1 VM(s) associated with  workloads before enabling Trusted launch security type. You can use the Restore Point to re-create the disks and Generation 1 VM with the previous well-known state.
 OS Disk free space    |    You will not be able to extend **Windows OS disk system volume** after MBR to GPT conversion. Recommendation is to extend system volume for future before executing Gen2-Trusted launch upgrade.
 OS Defragmentation    |    **Windows OS disk volume** should be defragmented using command `Defrag C: /U /V`. This will reduce the risk of MBR to GPT conversion failure by freeing up end of partitions. For more details, refer to [defrag](https://learn.microsoft.com/windows-server/administration/windows-commands/defrag)
