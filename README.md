@@ -34,6 +34,7 @@ Azure IaaS VM Agent    |    [Azure IaaS Windows VM Agent](https://learn.microsof
 Disk Encryption    |    If enabled, Disable any OS disk encryption including Bitlocker, CRYPT prior to upgrade. All disk encryptions should be re-enabled post successful upgrade.
 VM Backup    |    Azure Backup if enabled for VM(s) should be configured with Enhanced Backup Policy. Trusted launch security type cannot be enabled for Generation 2 VM(s) configured with Standard Policy backup protection.<br/>Existing Azure VM backup can be migrated from Standard to Enhanced policy using [Migrate Azure VM backups from standard to enhanced policy (preview)](https://learn.microsoft.com/azure/backup/backup-azure-vm-migrate-enhanced-policy)
 VM Disaster Recovery    |    Azure site recovery (ASR) does not supports Trusted launch upgrade. If enabled, ASR should be disabled prior to upgrade and re-enabled post upgrade.
+Linux VMs    |    Gen1 to Trusted launch upgrade script has been validated with Azure marketplace images Ubuntu 20.04, RHEL 8.4, SLES 15 SP3. For other distros, **mandatorily** validate the upgrade in lower environment before running in production.
 
 ## Best Practices
 
@@ -131,23 +132,14 @@ Windows 10 Gen1 VM is successfully upgraded to Trusted launch followed by succes
 2. Visual studio downloads OR,
 3. ISO generated using [Create Windows 11 Installation media](https://www.microsoft.com/software-download/windows11).
 
-Updated ISO will be available in volume license portal by end of November 2024.
-
-**Workaround** for the issue currently is to refresh the Windows 11 OS disk. For more details, [Refresh Windows 11 OS disk](./win11workaround/refreshWindows11OSDisk.md)
-Team is actively troubleshooting this issue.
-
-### Gen1 to Trusted launch upgrade for Linux distros
-
-Gen1 to Trusted launch upgrade script has been validated with Ubuntu 20.04 LTS, RHEL 8.4, SLES 15 SP3. For other distros, **mandatorily** validate the upgrade in lower environment before running in production.
-
 ### Cannot find room for the EFI system partition
 
 This error occurs for one of following reason:
 
 - There is no free space available on the system volume
 - System volume is corrupted. You can validate by trying to Shrink Volume by few MBs under Disk Management console. Use command `chkdsk C:/v/f` to repair system volume.
-- `Virtual Disk` is not running or unable to communicate successfully. Service startup type should be set to `Manual`.
-- `Optimize Drives` is not running or unable to communicate successfully. Service startup type should be set to `Manual`.
+- `Virtual Disk` service is not running or unable to communicate successfully. Service startup type should be set to `Manual`.
+- `Optimize Drives` service is not running or unable to communicate successfully. Service startup type should be set to `Manual`.
 - System volume disk is already configured with 4 MBR partitions (maximum supported by MBR disk layout). You need to delete one of the partition to make room for EFI system partition.
     1. Run `ReAgentc /info` to identify partition actively used by Recovery. Example: `Windows RE location:       \\?\GLOBALROOT\device\harddisk0\partition4\Recovery\WindowsRE`
     2. Run PowerShell cmdlet `Get-Partition -DiskNumber 0` to identify current partitions configured.
@@ -160,9 +152,9 @@ Temporary storage Drive letter assignment 'D' is changed to 'E' with previous le
 After the upgrade check the disks on the server, if system reserved partition has the letter D:, do the following actions:
 
 - reconfigure pagefile from D: to C:
-- reboot the server
+- reboot the VM
 - remove letter D: from the partition
-- reboot the server to show the temporary storage disk with D: letter
+- reboot the VM to show the temporary storage disk with D: letter
 
 ## Contributing
 
