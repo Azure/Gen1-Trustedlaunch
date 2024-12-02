@@ -1,0 +1,3 @@
+﻿vmName,vmResourceGroupName,EnableSecureBoot
+demovm01,demo-rg,TRUE
+demovm02,demo-rg,TRUE
