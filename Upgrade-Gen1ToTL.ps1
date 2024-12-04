@@ -749,17 +749,19 @@ if ($ERRORLEVEL -eq 0) {
                         $checkLinuxCmd = @'
 bootDevice=$(echo "/dev/$(lsblk -no pkname $(df /boot | awk 'NR==2 {print $1}'))") && diskType=$(blkid $bootDevice -o value -s PTTYPE) && efiPartition=$(fdisk -l $bootDevice | grep EFI | awk '{print $1}') && biosPartition=$(fdisk -l $bootDevice | grep -i 'BIOS Boot' | awk '{print $1}') && grep -qs '/boot/efi' /etc/fstab && echo 'Boot device: '$bootDevice', disk type: '$diskType', EFI partition: '$efiPartition', BIOS partition: '$biosPartition', /boot/efi present in /etc/fstab'|| echo 'Boot device: '$bootDevice', disk type: '$diskType', EFI partition: '$efiPartition', BIOS partition: '$biosPartition', /boot/efi missing in /etc/fstab'
 '@
-                        $messageTxt = "[$vmName] INFO: Writing validation script to gen2LinuxCheckCmd.txt"
-                        Write-Output $messageTxt
-                        Write-LogEntry -logMessage $messageTxt -logSeverity 3 -logComponent "MBR-GPT-Validation"
                         if ($useCloudshell) {
                             $checkCmdFile = [system.string]::concat($workingDirectory, "/gen2LinuxCheckCmd.txt")
                         } else {
                             $checkCmdFile = [system.string]::concat($workingDirectory, "\gen2LinuxCheckCmd.txt")
                         }
-                        $stream = [System.IO.StreamWriter]::new($checkCmdFile)
-                        $stream.WriteLine($checkLinuxCmd)
-                        $stream.Close()
+                        if (-not (Test-Path $checkCmdFile -ErrorAction 'SilentlyContinue')) {
+                            $messageTxt = "[$vmName] INFO: Writing validation script to gen2LinuxCheckCmd.txt"
+                            Write-Output $messageTxt
+                            Write-LogEntry -logMessage $messageTxt -logSeverity 3 -logComponent "MBR-GPT-Validation"
+                            $stream = [System.IO.StreamWriter]::new($checkCmdFile)
+                            $stream.WriteLine($checkLinuxCmd)
+                            $stream.Close()
+                        }
 
                         $messageTxt = "[$vmName] INFO: Executing validation script for $($vmName)"
                         Write-Output $messageTxt
