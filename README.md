@@ -59,7 +59,11 @@ Id    |    Step    |    Description
 
 ### Linux MBR to GPT conversion
 
->**DISCLAIMER**: These steps are not supported by Microsoft or respective distro owners. Review and validate the steps thoroughly before executing in production environment.
+>**DISCLAIMER**:
+>
+> - These steps are not supported by Microsoft or respective distro owners.
+> - Review and validate the steps thoroughly before executing in production environment.
+> - Take full backup of VM which can be used to restore VM as-is in event of any failure.
 
 For Linux VMs which are created outside Azure OR which are not created using Azure marketplace/derived images, you need to run below steps to complete MBR to GPT conversion.
 
