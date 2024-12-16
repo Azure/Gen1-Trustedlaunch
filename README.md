@@ -57,6 +57,30 @@ Id    |    Step    |    Description
 5    |    De-allocate and upgrade VM properties    |    Script will update the VM attributes from Gen1 to Gen2 and security type to Trusted launch.
 6    |    Start VM    |    Post successful upgrade, VM will be started.
 
+## Script execution
+
+Parameter Name    |    Description    |    Mandatory
+-|-|-
+subscriptionId    |    Subscription ID for Gen1 VM to be upgraded.    |    True
+tenantDomain    |    Primary AAD Domain Name for authentication. (For example, contoso.onmicrosoft.com)    |    True
+csvLocation    |    Local file path location of csv containing vmName, vmResourceGroupName, enableSecureBoot details.    |    True
+batchSize      |    Number of machines which should be processed in parallel. Default set to 5.    |    False
+useCloudShell    |    Use cloud shell in Azure Portal for script execution.    |    False
+
+Csv column Name    |    Description    |    Mandatory
+-|-|-
+vmName    |    Resource Name of Gen1 VM to be upgraded.    |    True
+vmResourceGroupName    |    Resource Group for Gen1 VM to be upgraded.    |    True
+enableSecureBoot    |    If target Trusted Launch VM should be deployed with Secure Boot enabled (TRUE) or disabled (FALSE). By default set to **TRUE**.<br/>This option should be disabled if VM is hosting custom or unsigned boot drivers which cannot be attested.    |    False
+
+**Example**
+
+```azurepowershell
+.\Upgrade-Gen1ToTL.ps1 -subscriptionId $subscriptionId -tenantDomain contoso.onmicrosoft.com -csvLocation "C:\Temp\sampleCsv.csv"
+    
+# Upgrade all VMs provided in csv from Gen1 to Trusted launch with specific parameter values.
+```
+
 ### Linux MBR to GPT conversion
 
 >**DISCLAIMER**:
@@ -86,30 +110,6 @@ Id    |    Step    |    Description
 13    |   <ol><li>Open `/etc/fstab` using command `sudo vi /etc/fstab`<li>Add the ESP mountpoint to /etc/fstab. (replace spaces with tab key)<br/>`/dev/disk/by-partlabel/EFI-system /boot/efi vfat defaults 0 2`<li>Save `/etc/fstab` using command in vi editor `wq`.    |    ![ESP Mount](./.attachments/06-ESP-Mount.png)
 14    |   Mount ESP<br/>`sudo mount /boot/efi`    |    
 15    |   Install the GRUB EFI bootloader.<br/>**Ubuntu/Debian:**<br/>`sudo grub-install --target=x86_64-efi /dev/sda`<br/>**RHEL:**<br/>`sudo grub2-install --target=x86_64-efi /dev/sda`    |    ![grub2 efi install](./.attachments/07a-grub2-efi-install.png)<br/>![grub 2 efi install contd](./.attachments/07b-grub2-efi-install.png)
-
-## Script execution
-
-Parameter Name    |    Description    |    Mandatory
--|-|-
-subscriptionId    |    Subscription ID for Gen1 VM to be upgraded.    |    True
-tenantDomain    |    Primary AAD Domain Name for authentication. (For example, contoso.onmicrosoft.com)    |    True
-csvLocation    |    Local file path location of csv containing vmName, vmResourceGroupName, enableSecureBoot details.    |    True
-batchSize      |    Number of machines which should be processed in parallel. Default set to 5.    |    False
-useCloudShell    |    Use cloud shell in Azure Portal for script execution.    |    False
-
-Csv column Name    |    Description    |    Mandatory
--|-|-
-vmName    |    Resource Name of Gen1 VM to be upgraded.    |    True
-vmResourceGroupName    |    Resource Group for Gen1 VM to be upgraded.    |    True
-enableSecureBoot    |    If target Trusted Launch VM should be deployed with Secure Boot enabled (TRUE) or disabled (FALSE). By default set to **TRUE**.<br/>This option should be disabled if VM is hosting custom or unsigned boot drivers which cannot be attested.    |    False
-
-**Example**
-
-```azurepowershell
-.\Upgrade-Gen1ToTL.ps1 -subscriptionId $subscriptionId -tenantDomain contoso.onmicrosoft.com -csvLocation "C:\Temp\sampleCsv.csv"
-    
-# Upgrade all VMs provided in csv from Gen1 to Trusted launch with specific parameter values.
-```
 
 ## Post-Conversion Activities
 
