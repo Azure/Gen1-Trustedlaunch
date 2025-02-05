@@ -99,7 +99,7 @@ Id    |    Step    |    Description
 -|-|-
 1    |    Query the OS Disk using below command<br/> `sudo lsblk -o NAME,HCTL,SIZE,MOUNTPOINT \| grep -i "sd"` | Identify the boot partition and associated disk<br/>![Identity boot partition](./.attachments/01-linux-identify-boot-partition.png)
 2    |    Backup MBR partition:<br/>`sudo dd if=/dev/sda of=backup.mbr bs=512 count=1`    |    Backup should be taken on drive other than Boot drive.<br/>![Backup boot partition](./.attachments/02-backup-boot-partition.png)
-3    |    Install `EFI Package`:<ul><li>**For Ubuntu**: `sudo apt install grub-efi-amd64`<br/>*Note*: `grub-efi-amd64-signed` is recommended if supported by OS configuration.<li>**For RHEL**: `sudo yum install gdisk grub2-x64-efi-modules efibootmgr dosfstools grub2-efi shim -y`</li></ul> | ![Ubuntu grub efi](./.attachments/01.On-Premise-Ubuntu.png)<br/>![RHEL grub efi](./.attachments/02.On-Premise-RHEL.png)
+3    |    Install `EFI Package`:<ul><li>**For Ubuntu**: `sudo apt install grub-efi-amd64`<br/>*Note*: `grub-efi-amd64-signed` is recommended if supported by OS configuration.<li>**For RHEL**: `sudo yum install gdisk grub2-efi-x64-modules efibootmgr dosfstools grub2-efi shim -y`</li></ul> | ![Ubuntu grub efi](./.attachments/01.On-Premise-Ubuntu.png)<br/>![RHEL grub efi](./.attachments/02.On-Premise-RHEL.png)
 4    |    Execute gdisk command `sudo gdisk /dev/sda`to create new partition with following values:<br/><ul><li>Command: **n**<li>Partition Number: `default`<li>First Sector: **34**<li>Last Sector: **2047**<li>partition type **ef02**<li>Command: **w** to write the changes</ul>    |    ![Gdisk Execution](./.attachments/gdisk.png)
 5    |    Update partition table changes:`sudo partprobe /dev/sda`    |    
 6    |    Install Bootloader in re-partitioned boot disk:<ul><li>**For Ubuntu**: `sudo grub-install /dev/sda`<li>**For RHEL & SLES** `sudo grub2-install /dev/sda`</ul>    |    ![grub execute](./.attachments/grubinstall.png)
@@ -112,7 +112,7 @@ Id    |    Step    |    Description
 13    |   <ol><li>Open `/etc/fstab` using command `sudo vi /etc/fstab`<li>Add the ESP mountpoint to /etc/fstab. (replace spaces with tab key)<br/>`/dev/disk/by-partlabel/EFI-system /boot/efi vfat defaults 0 2`<li>Save `/etc/fstab` using command in vi editor `wq`.    |    ![ESP Mount](./.attachments/06-ESP-Mount.png)
 14    |    Reload the systemd manager configuration using command `sudo systemctl daemon-reload`.    |    
 15    |   Mount ESP<br/>`sudo mount /boot/efi`    |    
-16    |   Install the GRUB EFI bootloader.<br/>**Ubuntu/Debian:**<br/>`sudo grub-install --target=x86_64-efi /dev/sda`<br/>**RHEL:**<br/>`sudo grub2-install --target=x86_64-efi /dev/sda`    |    ![grub2 efi install](./.attachments/07a-grub2-efi-install.png)<br/>![grub 2 efi install contd](./.attachments/07b-grub2-efi-install.png)
+16    |   Install the GRUB EFI bootloader.<br/>**Ubuntu/Debian:**<br/>`sudo grub-install --target=x86_64-efi /dev/sda`<br/>**RHEL:**<br/>`sudo grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg`    |    ![grub2 efi install](./.attachments/07a-grub2-efi-install.png)<br/>![grub 2 efi install contd](./.attachments/07b-grub2-efi-install.png)
 
 ## Post-Conversion Activities
 
