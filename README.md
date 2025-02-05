@@ -90,6 +90,7 @@ enableSecureBoot    |    If target Trusted Launch VM should be deployed with Sec
 > - These steps are not supported by Microsoft or respective distro owners.
 > - Review and validate the steps thoroughly before executing in production environment.
 > - Take full backup of VM which can be used to restore VM as-is in event of any failure.
+> - Ensure minimum 200M free disk space available on OS volume. Recommendation is to enlarge the OS disk by 200M before executing following steps for upgrade.
 
 For Linux VMs which are created outside Azure OR which are not created using Azure marketplace/derived images, you need to run below steps to complete MBR to GPT conversion.
 
