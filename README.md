@@ -10,16 +10,18 @@ Guest VM Attestation    |    Guest attestation extension enables proactive attes
 
 Newer OS like Windows Server 2022 Azure Edition require UEFI, Windows 11 requires UEFI & vTPM as pre-requisite for installation. Additionally, for enabling [Azure Compute security benchmark](https://learn.microsoft.com/azure/governance/policy/samples/guest-configuration-baseline-windows#secured-core) (like Secure Boot), UEFI support in OS is mandatory.
 
-You can now upgrade existing Gen1 (BIOS) VMs to Trusted launch by on-boarding to preview at **https://aka.ms/Gen1ToTLUpgrade**.
+You can now upgrade existing Gen1 (BIOS) VMs to Trusted launch. Learn more about this feature at **https://aka.ms/TrustedLaunchUpgrade**
 This repository provides end users with PowerShell script-based guidance which they can self-execute & upgrade existing Gen1 (BIOS) VMs to Gen2 (UEFI) VMs.
 
 **NOTE**: Please review the list of [Known issues](#known-issues) before executing validation.
 
 **IMPORTANT DISCLAIMER**
 
-**Production use:** The Preview should only be used for testing, evaluation and feedback. Production workloads are **not recommended.**
+This script is not supported under any Microsoft standard support program or service.
 
-Preview features are not backed with Microsoft Support SLA.
+This script is provided AS IS without warranty of any kind. Microsoft further disclaims all implied warranties including, without limitation, any implied warranties of merchantability or of fitness for a particular purpose.
+
+The entire risk arising out of the use or performance of the script and documentation remains with you. In no event shall Microsoft, its authors, or anyone else involved in the creation, production, or delivery of the script be liable for any damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or other pecuniary loss) arising out of the use of or inability to use the sample scripts or documentation, even if Microsoft has been advised of the possibility of such damages.
 
 ## Pre-Requisites
 
